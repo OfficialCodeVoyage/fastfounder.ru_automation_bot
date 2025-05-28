@@ -2,7 +2,7 @@ name: FastFounder Daily Digest - Multi-User
 
 on:
   schedule:
-    - cron: '0 6 * * *'  # 9:00 AM Moscow time (6:00 UTC)
+    - cron: '15 15 * * *'  # 9:15 AM Denver time (15:15 UTC during MDT)
   workflow_dispatch:  # Allow manual triggering
 
 jobs:

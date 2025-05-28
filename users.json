@@ -6,7 +6,7 @@
     "last_name": "Bondarenko",
     "joined_date": "2025-05-28T16:13:31.998376",
     "active": true,
-    "message_count": 0
+    "message_count": 1
   },
   "751791423": {
     "chat_id": "751791423",
@@ -15,6 +15,6 @@
     "last_name": null,
     "joined_date": "2025-05-28T16:13:31.998578",
     "active": true,
-    "message_count": 0
+    "message_count": 1
   }
 }
