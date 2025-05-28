@@ -1,0 +1,42 @@
+name: FastFounder Daily Digest - Multi-User
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # 9:00 AM Moscow time (6:00 UTC)
+  workflow_dispatch:  # Allow manual triggering
+
+jobs:
+  send-digest:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # No external dependencies needed - using only standard library
+    
+    - name: Run FastFounder Multi-User Bot
+      env:
+        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        FAST_FOUNDER_EMAIL: ${{ secrets.FAST_FOUNDER_EMAIL }}
+        FAST_FOUNDER_PASSWORD: ${{ secrets.FAST_FOUNDER_PASSWORD }}
+      run: |
+        echo "🚀 Starting FastFounder Daily Bot (Multi-User)"
+        python main_multiuser_daily.py
+    
+    - name: Upload user database (if changed)
+      uses: actions/upload-artifact@v3
+      if: always()
+      with:
+        name: user-database
+        path: users.json
+        retention-days: 30 

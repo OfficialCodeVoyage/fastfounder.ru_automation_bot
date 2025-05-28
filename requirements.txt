@@ -1,6 +1,19 @@
-# FastFounder Daily Bot - Production Dependencies
-# No external dependencies required - using only Python standard library
-# This ensures maximum reliability and minimal attack surface
+# FastFounder Daily Bot - Multi-User Edition
+# 
+# This bot uses only Python standard library modules:
+# - json (JSON handling)
+# - os (environment variables)
+# - urllib (HTTP requests)
+# - xml.etree.ElementTree (RSS parsing)
+# - html (HTML entity decoding)
+# - re (regular expressions)
+# - logging (logging)
+# - sys (system functions)
+# - datetime (date/time handling)
+# - http.cookiejar (cookie management)
+#
+# No external dependencies required!
+# Python 3.8+ is recommended.
 
 # Optional: For enhanced error handling and monitoring
 # requests==2.31.0
