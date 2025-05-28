@@ -33,21 +33,21 @@ jobs:
           pip install -r requirements.txt
 
       - name: Verify FastFounder credentials
+        env:
+          FAST_FOUNDER_EMAIL:    ${{ secrets.FAST_FOUNDER_EMAIL }}
+          FAST_FOUNDER_PASSWORD: ${{ secrets.FAST_FOUNDER_PASSWORD }}
         run: |
           if [[ -z "$FAST_FOUNDER_EMAIL" || -z "$FAST_FOUNDER_PASSWORD" ]]; then
             echo "⚠️ FAST_FOUNDER_EMAIL/PASSWORD not set, falling back to public scraping"
           else
             echo "✅ FAST_FOUNDER_EMAIL/PASSWORD found"
           fi
-        env:
-          FAST_FOUNDER_EMAIL:    ${{ secrets.FAST_FOUNDER_EMAIL }}
-          FAST_FOUNDER_PASSWORD: ${{ secrets.FAST_FOUNDER_PASSWORD }}
 
       - name: Run FastFounder Daily Bot (Authenticated)
         env:
-          OPENAI_API_KEY:   ${{ secrets.OPENAI_API_KEY }}
-          TELEGRAM_TOKEN:   ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          OPENAI_API_KEY:        ${{ secrets.OPENAI_API_KEY }}
+          TELEGRAM_TOKEN:        ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID:      ${{ secrets.TELEGRAM_CHAT_ID }}
           FAST_FOUNDER_EMAIL:    ${{ secrets.FAST_FOUNDER_EMAIL }}
           FAST_FOUNDER_PASSWORD: ${{ secrets.FAST_FOUNDER_PASSWORD }}
         run: |
@@ -57,7 +57,7 @@ jobs:
 
       - name: Upload logs (optional)
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v3.1.1
         with:
           name: fastfounder-logs
           path: logs/
