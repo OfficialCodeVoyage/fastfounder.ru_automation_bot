@@ -39,4 +39,4 @@ jobs:
       with:
         name: user-database
         path: users.json
-        retention-days: 30
+        retention-days: 30 
