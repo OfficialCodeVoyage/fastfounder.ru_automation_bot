@@ -1,0 +1,10 @@
+# FastFounder Daily Bot - Production Dependencies
+# No external dependencies required - using only Python standard library
+# This ensures maximum reliability and minimal attack surface
+
+# Optional: For enhanced error handling and monitoring
+# requests==2.31.0
+# python-telegram-bot==20.7
+
+# The bot is designed to work with Python standard library only
+# to avoid dependency conflicts and ensure reliability in GitHub Actions

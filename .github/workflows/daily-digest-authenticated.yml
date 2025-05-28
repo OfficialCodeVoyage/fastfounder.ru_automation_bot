@@ -1,0 +1,42 @@
+name: FastFounder Daily Digest (Authenticated)
+
+on:
+  schedule:
+    # Run daily at 9:15 AM Denver time (15:15 UTC)
+    - cron: '15 15 * * *'
+  
+  # Allow manual triggering
+  workflow_dispatch:
+
+jobs:
+  send-daily-digest:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Run FastFounder Daily Bot (Authenticated)
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        FAST_FOUNDER_EMAIL: ${{ secrets.FAST_FOUNDER_EMAIL }}
+        FAST_FOUNDER_PASSWORD: ${{ secrets.FAST_FOUNDER_PASSWORD }}
+      run: |
+        echo "🚀 Starting FastFounder Daily Bot (Authenticated Version)"
+        echo "📅 Current time: $(date)"
+        echo "🔐 Checking authentication credentials..."
+        
+        if [ -z "$FAST_FOUNDER_EMAIL" ] || [ -z "$FAST_FOUNDER_PASSWORD" ]; then
+          echo "⚠️ FastFounder credentials not found - will use fallback scraping"
+        else
+          echo "✅ FastFounder credentials found - will attempt authentication"
+        fi
+        
+        python3 main_authenticated.py 
