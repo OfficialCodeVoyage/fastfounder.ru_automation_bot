@@ -2,7 +2,7 @@ name: FastFounder Daily Digest (Authenticated)
 
 on:
   schedule:
-    # 09:15 MDT → 15:15 UTC
+    # Run daily at 9:15 AM MDT → 15:15 UTC
     - cron: '15 15 * * *'
   workflow_dispatch:
 
@@ -19,19 +19,6 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Cache pip (optional)
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Install dependencies (if any)
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-
       - name: Run FastFounder Daily Bot (Authenticated)
         env:
           OPENAI_API_KEY:        ${{ secrets.OPENAI_API_KEY }}
@@ -42,16 +29,12 @@ jobs:
         run: |
           echo "🚀 Starting FastFounder Daily Bot (Authenticated Version)"
           echo "📅 Current time: $(date)"
+          echo "🔐 Checking authentication credentials..."
+          
           if [ -z "$FAST_FOUNDER_EMAIL" ] || [ -z "$FAST_FOUNDER_PASSWORD" ]; then
-            echo "⚠️ FAST_FOUNDER_EMAIL/PASSWORD not set — falling back to public scraping"
+            echo "⚠️ FastFounder credentials not found - will use fallback scraping"
           else
-            echo "✅ Credentials found — will attempt authentication"
+            echo "✅ FastFounder credentials found - will attempt authentication"
           fi
+          
           python3 main_authenticated.py
-
-      - name: Upload logs (optional)
-        if: always()
-        uses: actions/upload-artifact@v3.1.1
-        with:
-          name: fastfounder-logs
-          path: logs/
