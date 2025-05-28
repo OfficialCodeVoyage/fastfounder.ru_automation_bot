@@ -1,42 +1,40 @@
-name: FastFounder Daily Digest - Multi-User
+name: FastFounder Daily Digest (Authenticated)
 
 on:
   schedule:
-    - cron: '15 15 * * *'  # 9:15 AM Denver time (15:15 UTC during MDT)
-  workflow_dispatch:  # Allow manual triggering
+    # Run daily at 9:15 AM MDT → 15:15 UTC
+    - cron: '15 15 * * *'
+  workflow_dispatch:
 
 jobs:
-  send-digest:
+  send-daily-digest:
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.9'
-    
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        # No external dependencies needed - using only standard library
-    
-    - name: Run FastFounder Multi-User Bot
-      env:
-        TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
-        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-        FAST_FOUNDER_EMAIL: ${{ secrets.FAST_FOUNDER_EMAIL }}
-        FAST_FOUNDER_PASSWORD: ${{ secrets.FAST_FOUNDER_PASSWORD }}
-      run: |
-        echo "🚀 Starting FastFounder Daily Bot (Multi-User)"
-        python main_multiuser_daily.py
-    
-    - name: Upload user database (if changed)
-      uses: actions/upload-artifact@v3
-      if: always()
-      with:
-        name: user-database
-        path: users.json
-        retention-days: 30 
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Run FastFounder Daily Bot (Authenticated)
+        env:
+          OPENAI_API_KEY:        ${{ secrets.OPENAI_API_KEY }}
+          TELEGRAM_TOKEN:        ${{ secrets.TELEGRAM_TOKEN }}
+          TELEGRAM_CHAT_ID:      ${{ secrets.TELEGRAM_CHAT_ID }}
+          FAST_FOUNDER_EMAIL:    ${{ secrets.FAST_FOUNDER_EMAIL }}
+          FAST_FOUNDER_PASSWORD: ${{ secrets.FAST_FOUNDER_PASSWORD }}
+        run: |
+          echo "🚀 Starting FastFounder Daily Bot (Authenticated Version)"
+          echo "📅 Current time: $(date)"
+          echo "🔐 Checking authentication credentials..."
+          
+          if [ -z "$FAST_FOUNDER_EMAIL" ] || [ -z "$FAST_FOUNDER_PASSWORD" ]; then
+            echo "⚠️ FastFounder credentials not found - will use fallback scraping"
+          else
+            echo "✅ FastFounder credentials found - will attempt authentication"
+          fi
+          
+          python3 main_authenticated.py
