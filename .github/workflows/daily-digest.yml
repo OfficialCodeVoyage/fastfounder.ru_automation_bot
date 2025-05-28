@@ -2,7 +2,7 @@ name: FastFounder Daily Digest (Authenticated)
 
 on:
   schedule:
-    # Run daily at 9:15 AM MDT → 15:15 UTC
+    # 09:15 MDT → 15:15 UTC
     - cron: '15 15 * * *'
   workflow_dispatch:
 
@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Cache pip
+      - name: Cache pip (optional)
         uses: actions/cache@v3
         with:
           path: ~/.cache/pip
@@ -27,21 +27,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
 
-      - name: Install dependencies
+      - name: Install dependencies (if any)
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-
-      - name: Verify FastFounder credentials
-        env:
-          FAST_FOUNDER_EMAIL:    ${{ secrets.FAST_FOUNDER_EMAIL }}
-          FAST_FOUNDER_PASSWORD: ${{ secrets.FAST_FOUNDER_PASSWORD }}
-        run: |
-          if [[ -z "$FAST_FOUNDER_EMAIL" || -z "$FAST_FOUNDER_PASSWORD" ]]; then
-            echo "⚠️ FAST_FOUNDER_EMAIL/PASSWORD not set, falling back to public scraping"
-          else
-            echo "✅ FAST_FOUNDER_EMAIL/PASSWORD found"
-          fi
 
       - name: Run FastFounder Daily Bot (Authenticated)
         env:
@@ -51,8 +40,13 @@ jobs:
           FAST_FOUNDER_EMAIL:    ${{ secrets.FAST_FOUNDER_EMAIL }}
           FAST_FOUNDER_PASSWORD: ${{ secrets.FAST_FOUNDER_PASSWORD }}
         run: |
-          echo "🚀 Starting FastFounder Daily Bot"
+          echo "🚀 Starting FastFounder Daily Bot (Authenticated Version)"
           echo "📅 Current time: $(date)"
+          if [ -z "$FAST_FOUNDER_EMAIL" ] || [ -z "$FAST_FOUNDER_PASSWORD" ]; then
+            echo "⚠️ FAST_FOUNDER_EMAIL/PASSWORD not set — falling back to public scraping"
+          else
+            echo "✅ Credentials found — will attempt authentication"
+          fi
           python3 main_authenticated.py
 
       - name: Upload logs (optional)
