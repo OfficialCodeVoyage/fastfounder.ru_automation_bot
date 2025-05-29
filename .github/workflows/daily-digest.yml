@@ -1,4 +1,4 @@
-name: FastFounder Daily Digest (Authenticated)
+name: FastFounder Daily Digest (Multi-User)
 
 on:
   schedule:
@@ -19,15 +19,14 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Run FastFounder Daily Bot (Authenticated)
+      - name: Run FastFounder Daily Bot (Multi-User)
         env:
           OPENAI_API_KEY:        ${{ secrets.OPENAI_API_KEY }}
           TELEGRAM_TOKEN:        ${{ secrets.TELEGRAM_TOKEN }}
-          TELEGRAM_CHAT_ID:      ${{ secrets.TELEGRAM_CHAT_ID }}
           FAST_FOUNDER_EMAIL:    ${{ secrets.FAST_FOUNDER_EMAIL }}
           FAST_FOUNDER_PASSWORD: ${{ secrets.FAST_FOUNDER_PASSWORD }}
         run: |
-          echo "🚀 Starting FastFounder Daily Bot (Authenticated Version)"
+          echo "🚀 Starting FastFounder Daily Bot (Multi-User Version)"
           echo "📅 Current time: $(date)"
           echo "🔐 Checking authentication credentials..."
           
@@ -37,4 +36,5 @@ jobs:
             echo "✅ FastFounder credentials found - will attempt authentication"
           fi
           
-          python3 main_authenticated.py
+          echo "👥 Will broadcast to all users in users.json"
+          python3 main_multiuser_daily.py

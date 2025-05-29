@@ -50,5 +50,3 @@ Thumbs.db
 # Test files
 test_*.py
 *_test.py
-
-users.json
